@@ -1,7 +1,12 @@
 <!DOCTYPE html>
 <html>
     <head>
+        <meta charset="utf-8">
         <style>
+            @page {
+                margin: 0.5in;
+            }
+
             * {
                 font-family: 'Trebuchet MS', 'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans', Arial, sans-serif;
             }
@@ -55,33 +60,35 @@
     <body>
         <div class="header">
             <div class="child-left">
-                <div class="name">Елисей Пузько</div>
-                <div class="profession">Software Developer</div>
-                <div class="age">20 лет</div>
+                <div class="name">{{.Name}}</div>
+                <div class="profession">{{.Profession}}</div>
+                <div class="age">{{.Age}}</div>
             </div>
             <div class="child-right">
-                <!-- For whatever reason, this string was being truncated to
-                a couple of characters, when using html/template, but changing
-                it to text/html seemed to fix the problem -->
-                <img class="photo" src="{{.Image}}">
+                <img class="photo" src="{{.CroppedImage}}">
             </div>
         </div>
 
         <h2>Образование</h2>
         <ul>
-            <li>РГГУ ИИНТБ (2020 — настоящее время)</li>
-            <li>IT Школа Samsung — диплом с отличием</li>
+            {{range $i, $v := .Education}}
+            <li>{{$v}}</li>
+            {{end}}
         </ul>
 
         <h2>Достижения</h2>
         <ul>
-            <li>Участник хакатонов: Gekkon GameHack III, КРОК MediaHack и CTF: MIEM CTF, Go CTF Schools</li>
+            {{range $i, $v := .Achievements}}
+            <li>{{$v}}</li>
+            {{end}}
         </ul>
 
         <h2>Навыки</h2>
-        <b>Английский — B2</b>
+        {{range $i, $v := .Languages}}
+        <b>{{$v}}</b>
+        {{end}}
         <div class="skills-container">
-            {{range $i, $c := .SkillColumns}}
+            {{range $i, $c := .SkillsColumns}}
             <div class="skills-column">
                 <ul>
                     {{range $i, $v := $c}}
@@ -91,6 +98,12 @@
             </div>
             {{end}}
         </div>
+
+        {{define "contact"}}
+        <li>
+            {{.Name}}: {{if .Link}}<a href="{{.Link}}">{{if .LinkText}}{{.LinkText}}{{else}}{{.Link}}{{end}}</a>{{else}}{{.Text}}{{end}}
+        </li>
+        {{end}}
 
         <h2>Контакты</h2>
         <ul>
